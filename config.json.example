@@ -1,0 +1,18 @@
+{
+  "clients": [
+    {
+      "instagram": "instagram_handle_1",
+      "whatsapp": "WhatsApp Group Name 1",
+      "lastSentPost": ""
+    },
+    {
+      "instagram": "instagram_handle_2",
+      "whatsapp": "WhatsApp Group Name 2",
+      "lastSentPost": ""
+    }
+  ],
+  "checkIntervalMinutes": 60,
+  "schedulerEnabled": false,
+  "runHeadless": true,
+  "onlyToday": false
+}
