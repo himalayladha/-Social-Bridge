@@ -15,11 +15,10 @@ Social-Bridge is a unified single-page dashboard control center designed to auto
 ## Local Setup
 
 ### 1. Installation
-Clone the repository and install all dependencies:
+Clone the repository:
 ```bash
 git clone https://github.com/himalayladha/-Social-Bridge.git
 cd -Social-Bridge
-npm install
 ```
 
 ### 2. Template Database Setup
@@ -30,7 +29,7 @@ cp db.json.example db.json
 ```
 
 ### 3. Run Locally
-Launch both the Vite frontend server and Express backend server concurrently:
+Launch the application. All dependency packages (`node_modules`) and Playwright Chromium binaries will be automatically checked and installed on the first run if they do not exist:
 ```bash
 npm run dev
 ```
