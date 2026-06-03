@@ -5,6 +5,8 @@
   "main": "src/backend/server.js",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/install-deps.js",
+    "prestart": "node scripts/install-deps.js",
     "dev:frontend": "vite",
     "dev:backend": "node src/backend/server.js",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
