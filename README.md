@@ -38,24 +38,4 @@ Open [http://localhost:3000](http://localhost:3000) to view the dashboard contro
 ---
 
 ## Deployment Guide
-
-### Frontend: Vercel
-You can easily deploy the frontend to **Vercel** to host the control panel:
-1.  Connect your GitHub repository to Vercel.
-2.  Set the Framework Preset to **Vite**.
-3.  Add the Environment Variable:
-    *   `VITE_API_URL`: Set this to your running backend API URL (e.g. `https://your-backend-api.onrender.com`).
-4.  Deploy!
-
-### Backend: VPS / VM (Railway, Render, DigitalOcean)
-> [!IMPORTANT]
-> The backend relies on a persistent scheduler and runs Playwright chromium instances to automate the browser. Because of this, it is **not** compatible with Serverless architectures (like Vercel Serverless Functions) due to execution time limits and browser dependency restrictions. You must run the backend on a persistent VM/VPS.
-
-1.  Deploy the codebase to a service that supports persistent processes (e.g. **Render Web Service** or **Railway**).
-2.  Ensure your deployment environment installs Playwright browser dependencies (on Render, use the Playwright buildpack or compile environment).
-3.  Set the `PORT` environment variable (defaults to `5000`).
-4.  Run the start script:
-    ```bash
-    npm start
-    ```
-5.  Configure your client connections and let the scheduler run in the background.
+This application is designed to be run locally on your desktop machine or a local home server. Because it controls automated browser instances (Playwright chromium) and maintains active login sessions for Instagram and WhatsApp Web, running locally avoids headless detection flags, IP restriction blocks from Instagram, and enables seamless cookie caching. It is not intended or configured for cloud serverless platforms like Vercel.

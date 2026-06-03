@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
-
 export default function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
   
@@ -62,7 +60,7 @@ export default function App() {
   // Load initial status
   const fetchStatus = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/status`);
+      const res = await fetch('/api/status');
       const data = await res.json();
       if (res.ok) {
         setConfig(data.config);
@@ -81,7 +79,7 @@ export default function App() {
     fetchStatus();
 
     // Listen to live logs stream
-    const eventSource = new EventSource(`${API_BASE}/api/logs`);
+    const eventSource = new EventSource('/api/logs');
     eventSource.onmessage = (event) => {
       try {
         const logEntry = JSON.parse(event.data);
@@ -124,7 +122,7 @@ export default function App() {
     setErrorMsg('');
     setSuccessMsg('');
     try {
-      const res = await fetch(`${API_BASE}/api/settings`, {
+      const res = await fetch('/api/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(config)
@@ -150,7 +148,7 @@ export default function App() {
     setErrorMsg('');
     setSuccessMsg('');
     try {
-      const res = await fetch(`${API_BASE}/api/connect/whatsapp`, { method: 'POST' });
+      const res = await fetch('/api/connect/whatsapp', { method: 'POST' });
       const data = await res.json();
       if (res.ok && data.success) {
         setSuccessMsg('WhatsApp connected successfully!');
@@ -171,7 +169,7 @@ export default function App() {
     setErrorMsg('');
     setSuccessMsg('');
     try {
-      const res = await fetch(`${API_BASE}/api/connect/instagram`, { method: 'POST' });
+      const res = await fetch('/api/connect/instagram', { method: 'POST' });
       const data = await res.json();
       if (res.ok && data.success) {
         setSuccessMsg('Instagram connected successfully!');
@@ -193,7 +191,7 @@ export default function App() {
     setErrorMsg('');
     setSuccessMsg('');
     try {
-      const res = await fetch(`${API_BASE}/api/disconnect/whatsapp`, { method: 'POST' });
+      const res = await fetch('/api/disconnect/whatsapp', { method: 'POST' });
       const data = await res.json();
       if (res.ok && data.success) {
         setSuccessMsg('WhatsApp disconnected and session cleared successfully!');
@@ -215,7 +213,7 @@ export default function App() {
     setErrorMsg('');
     setSuccessMsg('');
     try {
-      const res = await fetch(`${API_BASE}/api/disconnect/instagram`, { method: 'POST' });
+      const res = await fetch('/api/disconnect/instagram', { method: 'POST' });
       const data = await res.json();
       if (res.ok && data.success) {
         setSuccessMsg('Instagram disconnected and session cleared successfully!');
@@ -237,7 +235,7 @@ export default function App() {
     setSuccessMsg('');
     try {
       // First auto-save settings to the backend so the run works with current UI configuration
-      const saveRes = await fetch(`${API_BASE}/api/settings`, {
+      const saveRes = await fetch('/api/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(config)
@@ -247,7 +245,7 @@ export default function App() {
         throw new Error(saveData.error || 'Failed to auto-save settings before running.');
       }
 
-      const res = await fetch(`${API_BASE}/api/run`, { method: 'POST' });
+      const res = await fetch('/api/run', { method: 'POST' });
       const data = await res.json();
       if (res.ok && data.success) {
         setSuccessMsg('Settings saved and manual check started in the background. Check logs below.');
