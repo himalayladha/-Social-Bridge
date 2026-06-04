@@ -672,11 +672,22 @@ export async function runAutomation(config, logCallback) {
 
         // Select the chat
         logCallback('[WhatsApp] Opening group chat...');
-        const chatTitleSelector = `span[title="${targetWhatsAppGroupName}"], span:has-text("${targetWhatsAppGroupName}")`;
+        const chatTitleSelector = `#pane-side span[title="${targetWhatsAppGroupName}"], [data-testid="chat-list"] span[title="${targetWhatsAppGroupName}"], span[title="${targetWhatsAppGroupName}"]`;
         const contactElement = waPage.locator(chatTitleSelector).first();
         
         await contactElement.waitFor({ state: 'visible', timeout: 15000 });
         await contactElement.click();
+        
+        // Validate that the correct chat header is open
+        const activeHeaderSelector = `header span[title="${targetWhatsAppGroupName}"], [data-testid="conversation-header"] span[title="${targetWhatsAppGroupName}"], header span:has-text("${targetWhatsAppGroupName}")`;
+        const activeHeader = waPage.locator(activeHeaderSelector).first();
+        try {
+          await activeHeader.waitFor({ state: 'visible', timeout: 8000 });
+          logCallback(`[WhatsApp] Verified: Chat "${targetWhatsAppGroupName}" is open.`);
+        } catch (e) {
+          throw new Error(`Failed to verify that the chat "${targetWhatsAppGroupName}" was opened. Active chat header not found.`);
+        }
+
         logCallback('[WhatsApp] Chat opened!');
         await delay(2000);
 
@@ -748,8 +759,13 @@ export async function runAutomation(config, logCallback) {
         const sendButtonSelector = 'button[aria-label="Send"], [data-testid="wds-ic-send-filled"], [data-testid="send"]';
         const sendButton = waPage.locator(sendButtonSelector).first();
         await sendButton.waitFor({ state: 'attached', timeout: 15000 });
-        await sendButton.evaluate(el => el.click());
-        logCallback('[WhatsApp] Send button clicked via DOM evaluate.');
+        try {
+          await sendButton.click({ force: true, timeout: 5000 });
+          logCallback('[WhatsApp] Send button clicked natively.');
+        } catch (err) {
+          await sendButton.evaluate(el => el.click());
+          logCallback('[WhatsApp] Send button clicked via DOM evaluate fallback.');
+        }
 
         let sent = false;
         for (let i = 0; i < 25; i++) {
@@ -817,6 +833,8 @@ export async function runAutomation(config, logCallback) {
     logCallback(`Global execution error: ${globalError.message}`, 'error');
     throw globalError;
   } finally {
+    logCallback('[WhatsApp] Waiting 10 seconds for pending media and messages to finish transmitting...');
+    await delay(10000);
     logCallback('[WhatsApp] Closing both browser contexts...');
     await igContext.close().catch(() => {});
     await waContext.close().catch(() => {});
