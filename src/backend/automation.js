@@ -594,7 +594,7 @@ export async function runAutomation(config, logCallback) {
         logCallback(`[Instagram] Post timestamp: ${postDate.toLocaleString()}`);
 
         if (onlyToday && !isToday) {
-          logCallback(`[Instagram] Latest post was created on ${postDate.toLocaleDateString()}, which is not today. Skipping.`, 'warn');
+          logCallback(`[Instagram] Latest post was created on ${postDate.toLocaleDateString()}, which is not today. Skipping (calendar filter enabled).`, 'info');
           results.push({ client, status: 'skipped', reason: 'Post not from today', shortcode });
           continue;
         }
