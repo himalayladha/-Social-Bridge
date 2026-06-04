@@ -595,7 +595,7 @@ export async function runAutomation(config, logCallback) {
 
         if (onlyToday && !isToday) {
           logCallback(`[Instagram] Latest post was created on ${postDate.toLocaleDateString()}, which is not today. Skipping (calendar filter enabled).`, 'info');
-          results.push({ client, status: 'skipped', reason: 'Post not from today', shortcode });
+          results.push({ client, status: 'skipped', reason: 'No new post found today', shortcode });
           continue;
         }
 
