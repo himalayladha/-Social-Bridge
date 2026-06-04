@@ -14,6 +14,29 @@ app.use(express.json());
 const configPath = path.join(process.cwd(), 'config.json');
 const dbPath = path.join(process.cwd(), 'db.json');
 
+// Ensure configuration databases exist
+if (!fs.existsSync(configPath)) {
+  const configExample = path.join(process.cwd(), 'config.json.example');
+  if (fs.existsSync(configExample)) {
+    fs.copyFileSync(configExample, configPath);
+    console.log('[INFO] config.json initialized from template.');
+  } else {
+    fs.writeFileSync(configPath, JSON.stringify({ clients: [], checkIntervalMinutes: 60, schedulerEnabled: false, runHeadless: true, onlyToday: false }, null, 2));
+    console.log('[INFO] config.json initialized with default settings.');
+  }
+}
+
+if (!fs.existsSync(dbPath)) {
+  const dbExample = path.join(process.cwd(), 'db.json.example');
+  if (fs.existsSync(dbExample)) {
+    fs.copyFileSync(dbExample, dbPath);
+    console.log('[INFO] db.json initialized from template.');
+  } else {
+    fs.writeFileSync(dbPath, JSON.stringify({ history: [], whatsappConnected: false, instagramConnected: false }, null, 2));
+    console.log('[INFO] db.json initialized with default database.');
+  }
+}
+
 // Manage SSE connections
 const clients = new Set();
 
